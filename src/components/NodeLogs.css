@@ -1,0 +1,128 @@
+.node-logs-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  align-items: stretch;
+}
+
+.log-panel {
+  flex: 1 1 240px;
+  max-width: 320px;
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(71, 85, 105, 0.2);
+  border-radius: 14px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+  min-height: 220px;
+}
+
+.log-panel:hover {
+  border-color: rgba(94, 234, 212, 0.2);
+  transform: translateY(-2px);
+  background: rgba(15, 23, 42, 0.5);
+}
+
+/* State-branded borders */
+.log-panel.state-leader { border-left: 4px solid #f97316; }
+.log-panel.state-candidate { border-left: 4px solid #d946ef; }
+.log-panel.state-follower { border-left: 4px solid #3b82f6; }
+
+.log-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(71, 85, 105, 0.15);
+}
+
+.log-panel-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+}
+
+.status-badge {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.badge-leader { background: rgba(249, 115, 22, 0.15); color: #fb923c; border: 1px solid rgba(249, 115, 22, 0.3); }
+.badge-candidate { background: rgba(217, 70, 239, 0.15); color: #e879f9; border: 1px solid rgba(217, 70, 239, 0.3); }
+.badge-follower { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); }
+
+.log-scroll-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  overflow-y: auto;
+  height: 160px;
+  max-height: 160px;
+  padding-right: 6px;
+}
+
+/* Custom Scrollbar */
+.log-scroll-container::-webkit-scrollbar { width: 4px; }
+.log-scroll-container::-webkit-scrollbar-track { background: transparent; }
+.log-scroll-container::-webkit-scrollbar-thumb {
+  background: rgba(71, 85, 105, 0.4);
+  border-radius: 10px;
+}
+
+.log-entry {
+  display: grid;
+  grid-template-columns: 32px 1fr auto;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: 8px;
+  font-size: 11px;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  transition: background 0.2s ease;
+}
+
+.log-entry-index {
+  color: #64748b;
+  font-weight: 600;
+  text-align: right;
+  opacity: 0.8;
+}
+
+.log-entry-content {
+  color: #e2e8f0;
+  word-break: break-all;
+}
+
+.log-entry-committed {
+  background: rgba(16, 185, 129, 0.06);
+  border: 1px solid rgba(16, 185, 129, 0.15);
+}
+
+.log-entry-uncommitted {
+  background: rgba(245, 158, 11, 0.06);
+  border: 1px solid rgba(245, 158, 11, 0.15);
+}
+
+.log-check-mark {
+  color: #10b981;
+  font-size: 10px;
+}
+
+.log-empty-state {
+  color: #475569;
+  font-size: 11px;
+  font-style: italic;
+  text-align: center;
+  margin: 2rem 0;
+}

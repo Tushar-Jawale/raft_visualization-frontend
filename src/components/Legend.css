@@ -1,0 +1,36 @@
+.legend-container {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  padding: 2rem 0;
+  border-top: 1px solid rgba(71, 85, 105, 0.4);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 14px;
+}
+
+.legend-circle {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+}
+
+.legend-leader {
+  background: linear-gradient(135deg, #f97316, #ef4444);
+}
+
+.legend-candidate {
+  background: linear-gradient(135deg, #a855f7, #f59e0b);
+}
+
+.legend-follower {
+  background: linear-gradient(135deg, #3b82f6, #06b6d4);
+}
+
+.legend-offline {
+  background: linear-gradient(135deg, #64748b, #334155);
+}

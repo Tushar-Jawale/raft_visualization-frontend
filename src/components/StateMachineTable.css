@@ -1,0 +1,63 @@
+.sm-container {
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgba(71, 85, 105, 0.4);
+  border-radius: 12px;
+  padding: 1.5rem;
+  backdrop-filter: blur(10px);
+  margin-bottom: 2rem;
+}
+
+.sm-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin: 0 0 1rem 0;
+  color: #10b981;
+}
+
+.sm-empty {
+  color: #64748b;
+  font-size: 12px;
+  font-style: italic;
+  padding: 1rem;
+}
+
+.sm-table-wrapper {
+  overflow-x: auto;
+}
+
+.sm-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.sm-table th {
+  padding: 0.75rem;
+  text-align: left;
+  color: #10b981;
+  font-weight: 700;
+  border-bottom: 2px solid rgba(16, 185, 129, 0.3);
+}
+
+.sm-table tr {
+  border-bottom: 1px solid rgba(71, 85, 105, 0.3);
+}
+
+.sm-cell {
+  padding: 0.75rem;
+  font-family: monospace;
+  word-break: break-word;
+}
+
+.sm-key {
+  color: #cbd5e1;
+}
+
+.sm-val {
+  color: #10b981;
+}
+
+.sm-time {
+  color: #94a3b8;
+  font-size: 11px;
+}
