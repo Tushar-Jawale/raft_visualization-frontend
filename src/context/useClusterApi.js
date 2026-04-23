@@ -17,13 +17,15 @@ export const useClusterApi = ({
     setGetResult(null);
 
     try {
+      const baseUrl = import.meta.env.VITE_BACKEND_URL || '';
+      
       if (op === 'SET') {
         const payload = {
           type: 'client_command',
           command: `SET ${inputKey}.${inputField}=${inputValue}`,
           key: inputKey, field: inputField, value: inputValue,
         };
-        const response = await fetch(`/kv-store`, {
+        const response = await fetch(`${baseUrl}/kv-store`, {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
         });
@@ -31,12 +33,12 @@ export const useClusterApi = ({
         
         setInputKey(''); setInputField(''); setInputValue('');
       } else if (op === 'GET') {
-        const response = await fetch(`/kv-store?key=${inputKey}&field=${inputField}`);
+        const response = await fetch(`${baseUrl}/kv-store?key=${inputKey}&field=${inputField}`);
         const data = await response.json();
         if (!response.ok) throw new Error(data.message || `HTTP ${response.status}`);
         setGetResult(data);
       } else if (op === 'DELETE') {
-        const response = await fetch(`/kv-store?key=${inputKey}&field=${inputField}`, { method: 'DELETE' });
+        const response = await fetch(`${baseUrl}/kv-store?key=${inputKey}&field=${inputField}`, { method: 'DELETE' });
         if (!response.ok) {
           const errorData = await response.json().catch(() => ({}));
           throw new Error(errorData.message || `HTTP ${response.status}`);
@@ -64,7 +66,8 @@ export const useClusterApi = ({
 
   const toggleNodePower = async (nodeId) => {
     try {
-      const response = await fetch(`/cluster/node/${nodeId}/toggle`, {
+      const baseUrl = import.meta.env.VITE_BACKEND_URL || '';
+      const response = await fetch(`${baseUrl}/cluster/node/${nodeId}/toggle`, {
         method: 'POST'
       });
       const data = await response.json();

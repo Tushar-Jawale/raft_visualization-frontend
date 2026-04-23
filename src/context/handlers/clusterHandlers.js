@@ -1,12 +1,12 @@
 /**
  * Handlers for cluster-level WebSocket messages:
- *   heartbeat, peer_response, node_state_change
+ *   heartbeat, peer_response, node_state_change, node_power_change
  */
 
 export const createClusterHandlers = ({
   setLeaderId, setCurrentTerm, setLastLogIndex, setLastLogTerm,
   setFollowers, setLastHeartbeatTime, setPeerResponses,
-  setActiveMessage, addDebug,
+  setActiveMessage, setNodePowerStatus, addDebug,
 }) => {
 
   const handleHeartbeat = (message) => {
@@ -66,5 +66,17 @@ export const createClusterHandlers = ({
     }
   };
 
-  return { handleHeartbeat, handlePeerResponse, handleNodeStateChange };
+  // Fired by the backend whenever any tab toggles a node's power.
+  // Updates nodePowerStatus in ALL open tabs so the UI stays in sync.
+  const handleNodePowerChange = (message) => {
+    const { node_id, status } = message;
+    if (!node_id || !status) {
+      addDebug('node_power_change missing fields');
+      return;
+    }
+    setNodePowerStatus((prev) => ({ ...prev, [node_id]: status }));
+    addDebug(`⚡ Node ${node_id} is now ${status.toUpperCase()}`);
+  };
+
+  return { handleHeartbeat, handlePeerResponse, handleNodeStateChange, handleNodePowerChange };
 };

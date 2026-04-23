@@ -68,7 +68,7 @@ export const RaftProvider = ({ children }) => {
   const clusterHandlers = createClusterHandlers({
     setLeaderId, setCurrentTerm, setLastLogIndex, setLastLogTerm,
     setFollowers, setLastHeartbeatTime, setPeerResponses,
-    setActiveMessage, addDebug,
+    setActiveMessage, setNodePowerStatus, addDebug,
   });
 
   const electionHandlers = createElectionHandlers({
@@ -94,7 +94,8 @@ export const RaftProvider = ({ children }) => {
   useEffect(() => {
     const fetchConfig = async () => {
       try {
-        const response = await fetch('/cluster/config');
+        const baseUrl = import.meta.env.VITE_BACKEND_URL || '';
+        const response = await fetch(`${baseUrl}/cluster/config`);
         if (response.ok) {
           const config = await response.json();
           const nodeIds = Object.keys(config).sort();
@@ -129,8 +130,17 @@ export const RaftProvider = ({ children }) => {
   useEffect(() => {
     const connectWebSocket = () => {
       try {
-        const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-        const wsUrl = `${wsProtocol}//${window.location.host}/ws`;
+        const envUrl = import.meta.env.VITE_BACKEND_URL;
+        let wsUrl = '';
+        if (envUrl) {
+          const urlObj = new URL(envUrl);
+          const wsProtocol = urlObj.protocol === 'https:' ? 'wss:' : 'ws:';
+          wsUrl = `${wsProtocol}//${urlObj.host}/ws`;
+        } else {
+          const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+          wsUrl = `${wsProtocol}//${window.location.host}/ws`;
+        }
+        
         addDebug(`Attempting WebSocket connection to ${wsUrl}`);
         wsRef.current = new WebSocket(wsUrl);
 
@@ -176,15 +186,16 @@ export const RaftProvider = ({ children }) => {
   const handleWebSocketMessage = (message) => {
     try {
       switch (message.type) {
-        case 'heartbeat':        clusterHandlers.handleHeartbeat(message); break;
-        case 'peer_response':    clusterHandlers.handlePeerResponse(message); break;
-        case 'node_state_change':clusterHandlers.handleNodeStateChange(message); break;
-        case 'log_entry':        logHandlers.handleLogEntry(message); break;
-        case 'entries_committed':logHandlers.handleEntriesCommitted(message); break;
-        case 'kv_store_update':  logHandlers.handleKVStoreUpdate(message); break;
-        case 'vote_request':     electionHandlers.handleVoteRequest(message); break;
-        case 'vote_response':    electionHandlers.handleVoteResponse(message); break;
-        case 'election_result':  electionHandlers.handleElectionResult(message); break;
+        case 'heartbeat':         clusterHandlers.handleHeartbeat(message); break;
+        case 'peer_response':     clusterHandlers.handlePeerResponse(message); break;
+        case 'node_state_change': clusterHandlers.handleNodeStateChange(message); break;
+        case 'node_power_change': clusterHandlers.handleNodePowerChange(message); break;
+        case 'log_entry':         logHandlers.handleLogEntry(message); break;
+        case 'entries_committed': logHandlers.handleEntriesCommitted(message); break;
+        case 'kv_store_update':   logHandlers.handleKVStoreUpdate(message); break;
+        case 'vote_request':      electionHandlers.handleVoteRequest(message); break;
+        case 'vote_response':     electionHandlers.handleVoteResponse(message); break;
+        case 'election_result':   electionHandlers.handleElectionResult(message); break;
         default: addDebug(`Unknown message type: ${message.type}`);
       }
     } catch (e) {
